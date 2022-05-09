@@ -7,57 +7,53 @@ const rl = readline.createInterface({
     terminal: false
 });
 
-fs.unlinkSync("../../../output.json");
+fs.unlinkSync("../../../worksData.json");
 
 let count = 0;
-// let a;
-// let dataArray = [];
 
 async function readData (line) {
     return new Promise((resolve, reject) => {
         try {
-            let x = line.substring(line.indexOf('{'));
-            let a = JSON.parse(x);
-            // console.log(a);
-            // console.log(a.authors[0].author.key);
-            let y;
-            if (a.authors) {
-                if (a.authors[0].author) {
-                    y = {
-                        title: a.title,
-                        authorCode: a.authors[0].author.key,
-                        worksCode: a.key
+            let lineData = line.substring(line.indexOf('{'));
+            let lineJSONData = JSON.parse(lineData);
+
+            let extractedJSONData;
+            if (lineJSONData.authors) {
+                if (lineJSONData.authors[0].author) {
+                    extractedJSONData = {
+                        title: lineJSONData.title,
+                        authorCode: lineJSONData.authors[0].author.key,
+                        worksCode: lineJSONData.key
                     }
                 } else {
-                    y = {
-                        title: a.title,
+                    extractedJSONData = {
+                        title: lineJSONData.title,
                         authorCode: null,
-                        worksCode: a.key
+                        worksCode: lineJSONData.key
                     }
                 }        
             } else {
-                y = {
-                    title: a.title,
-                    authorCode: undefined,
-                    worksCode: a.key
+                extractedJSONData = {
+                    title: lineJSONData.title,
+                    authorCode: null,
+                    worksCode: lineJSONData.key
                 }
             }
 
-            return resolve(y);
+            return resolve(extractedJSONData);
             
     
           } catch(err) {
             console.error(err);
             reject(`Data unsuccessfully read. ${count}`);
           }
-    });
-    
+    });    
 }
 
-async function writeData (y) {
+async function writeData (extractedJSONData) {
     return new Promise((resolve, reject) => {
         try {    
-            fs.appendFileSync("../../../output.json", JSON.stringify(y)+'\n', 'utf8');
+            fs.appendFileSync("../../../worksData.json", JSON.stringify(extractedJSONData)+'\n', 'utf8');
             resolve("File successfully parsed.");
             
     
@@ -66,7 +62,6 @@ async function writeData (y) {
             reject("File unsuccessfully parsed.");
           }
     });
-    
 }
 
 rl.on('line', async function (line) {
@@ -77,17 +72,11 @@ rl.on('line', async function (line) {
 
     } catch (err) {
         console.log(err);
-    }
-    
-    
+    }  
 });
 
 rl.on('close', () => {
     console.log('Done!');
     console.log(count);
-    // console.log(a);
-
-    
-
-})
+});
 
