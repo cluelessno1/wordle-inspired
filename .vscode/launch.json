@@ -11,7 +11,9 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${workspaceFolder}\\server\\utilities\\extractDataFromOLDumpsWorks2.js"
+            "program": "${workspaceFolder}\\server\\trials\\readTrial2.js"
+            // "program": "${workspaceFolder}\\server\\utilities\\uploadWorksDataToMongo3.js"
+            // "program": "${workspaceFolder}\\server\\server.js"
         }
     ]
 }
