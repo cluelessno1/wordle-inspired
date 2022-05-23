@@ -63,14 +63,29 @@ async function worksLineByLine() {
 
             lrWorks.on('line', async function (line2) {
                 // 'line' contains the current line without the trailing newline character.
-                if (worksCount % 1000000 === 0) {
+                if (worksCount % 10000 === 0) {
                     console.log("Reading Works Data. Count is : "+worksCount);
                 }
                 let lineJSONData = JSON.parse(line2);
+                let tempObj = await authorsArray.find(JSONobj => JSONobj.authorCode === lineJSONData.authorCode);
+                let lineAuthorName;
+                let lineWorkName;
+
+                if (tempObj != undefined && tempObj.authorName) {
+                    lineAuthorName = tempObj.authorName;
+                } else {
+                    lineAuthorName = null;
+                }
+
+                if (lineJSONData.title) {
+                    lineWorkName = lineJSONData.title;
+                } else {
+                    lineWorkName = null;
+                }                
                 
                 let newJSON = {
-                    title: lineJSONData.title,
-                    author: await authorsArray.find(JSONobj => JSONobj.authorCode === lineJSONData.authorCode).authorName
+                    title: lineWorkName,
+                    author: lineAuthorName
                 }
                 
                 await writeData(newJSON);
@@ -96,7 +111,8 @@ async function worksLineByLine() {
 
 async function writeData (extractedJSONData) {
     return new Promise((resolve, reject) => {
-        try {    
+        try {
+            // console.log(extractedJSONData);    
             fs.appendFileSync("../../../completeData.json", JSON.stringify(extractedJSONData)+'\n', 'utf8');
             resolve("File successfully parsed.");
             
@@ -109,7 +125,7 @@ async function writeData (extractedJSONData) {
 }
 
 async function startFunc() {
-    fs.unlinkSync("../../../completeData.json");
+    // fs.unlinkSync("../../../completeData.json");
     await authorsLineByLine();
     console.log("Finished with Author data");
     await worksLineByLine();

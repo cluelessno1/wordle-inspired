@@ -1,7 +1,7 @@
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const uri = "mongodb+srv://root:root@cluster0.okqft.mongodb.net/OpenLibraryData?retryWrites=true&w=majority";
 var LineByLineReader = require('line-by-line'),
-    lr = new LineByLineReader('E:/SDE_Career/wordle-inspired/worksData.json');
+    lr = new LineByLineReader('E:/SDE_Career/completeData.json');
 
 lr.on('error', function (err) {
 	// 'err' contains error object
@@ -57,6 +57,9 @@ lr.on('line', async function (line) {
     let lineJSONData = JSON.parse(line);
     arr.push(lineJSONData);
     count++;
+    if (count > 15000000) {
+        lr.close();
+    }
     if (count%100000==0) {
         lr.pause();
         await tempFunc(arr,count);

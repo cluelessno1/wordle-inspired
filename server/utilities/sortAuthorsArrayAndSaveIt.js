@@ -27,7 +27,7 @@ async function authorsLineByLine() {
     return new Promise((resolve, reject) => {
         try {
             const lrAuthors = readline.createInterface({
-                input: fs.createReadStream('E:/SDE_Career/authorsData.json'),
+                input: fs.createReadStream('E:/SDE_Career/uploadTest2.json'),
                 output: process.stdout,
                 terminal: false
             });
