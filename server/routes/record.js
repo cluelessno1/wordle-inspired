@@ -14,7 +14,7 @@ recordRoutes.route("/record").post(async function (req, res) {
     // console.log(workTitle);
     let workListBasedOnTitle = await queryDB.queryData(workTitle);
     res.json(workListBasedOnTitle);
-    console.log(workListBasedOnTitle);
+    // console.log(workListBasedOnTitle);
 });
 
 module.exports = recordRoutes;
