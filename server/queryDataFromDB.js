@@ -10,7 +10,7 @@ async function queryData (queryString) {
                 if (err) throw err;
                 var dbo = db.db("OpenLibraryData");
                 var query = { title: {$regex: `^${queryString}`,$options:'i'} };
-                dbo.collection("works").find(query).toArray(function(err, result) {
+                dbo.collection("works").find(query).limit(parseInt(process.env.DB_Query_Return_Limit)).toArray(function(err, result) {
                   if (err) throw err;
                   // console.log(result);
                   db.close();
