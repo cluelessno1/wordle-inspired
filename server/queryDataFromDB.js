@@ -9,7 +9,7 @@ async function queryData (queryString) {
             MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 }, function(err, db) {
                 if (err) throw err;
                 var dbo = db.db("OpenLibraryData");
-                var query = { title: {$regex: `^${queryString}`,$options:'i'} };
+                var query ={ $or: [{ title: {$regex: `${queryString}`,$options:'i'} }, { author: {$regex: `${queryString}`,$options:'i'} }]} ;
                 dbo.collection("works").find(query).limit(parseInt(process.env.DB_Query_Return_Limit)).toArray(function(err, result) {
                   if (err) throw err;
                   // console.log(result);
