@@ -35,11 +35,17 @@ export default function InputField({ setBookDetails }) {
 
     }
 
+    async function clearInputField () {
+        bookNameRef.current.value = null;
+        setBookDetails([]);
+    }
+
     return (
         <div>
             <label>Enter Book Name</label>
             <input ref={bookNameRef} type="text" onChange={searchForBookName} />
             <button onClick={searchForBookName}>Search</button>
+            <button onClick={clearInputField}>Clear</button>
         </div>
     )
 }
