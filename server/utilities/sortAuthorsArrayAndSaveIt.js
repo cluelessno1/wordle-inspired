@@ -17,7 +17,7 @@ async function getAuthorNumber(authorId) {
 
         } catch (err) {
             console.log(err);
-            reject(-1);
+            return reject(-1);
         }
     });
 
@@ -27,7 +27,7 @@ async function authorsLineByLine() {
     return new Promise((resolve, reject) => {
         try {
             const lrAuthors = readline.createInterface({
-                input: fs.createReadStream('E:/SDE_Career/uploadTest2.json'),
+                input: fs.createReadStream('E:/SDE_Career/authorsData.json'),
                 output: process.stdout,
                 terminal: false
             });
@@ -56,7 +56,19 @@ async function authorsLineByLine() {
                 console.log("Count is : " + authorsCount);
                 console.log("Length of authors array is :" + authorsArray.length);
                 // lrAuthors.close();
-                authorsArray.sort((a,b) => getAuthorNumber(a.authorCode) - getAuthorNumber(b.authorCode));
+                authorsArray.sort(function (a,b) {
+                    let tempX = a.authorCode.split('/')[2];
+                    let x = parseInt(tempX.substring(2, tempX.length-1));
+                    let tempY = b.authorCode.split('/')[2];
+                    let y = parseInt(tempY.substring(2, tempY.length-1));
+                    if (x < y) {
+                        return -1;
+                    }
+                    if (x > y) {
+                        return 1;
+                    }
+                    return 0;
+                });
                 console.log("Authors Array Sorted");
                 resolve("Author data successfully parsed");
             });
@@ -71,6 +83,7 @@ async function authorsLineByLine() {
 async function writeData(extractedJSONData) {
     return new Promise((resolve, reject) => {
         try {
+            // fs.unlinkSync("../../../sortedAuthorsArray.json");
             fs.writeFileSync("../../../sortedAuthorsArray.json", JSON.stringify(extractedJSONData) + '\n', 'utf8');
             resolve("File successfully saved.");
 
