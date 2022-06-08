@@ -1,13 +1,13 @@
 import React from 'react';
-import InputField from './InputField';
-import DisplaySearchResult from './DisplaySearchResult';
+import SearchBar from './SearchBar';
 
-export default function SearchBookName({ bookDetails, setBookDetails }) {
+export default function SearchBookName() {
     return (
         <>
-            {bookDetails.length}
-            <InputField setBookDetails={setBookDetails}/>
-            <DisplaySearchResult bookDetails={bookDetails} />
+            {/* {bookDetails.length} */}
+            <SearchBar></SearchBar>
+            {/* <InputField setBookDetails={setBookDetails} bookDetails={bookDetails} />
+            <DisplaySearchResult bookDetails={bookDetails} /> */}
         </>
     );
 }
