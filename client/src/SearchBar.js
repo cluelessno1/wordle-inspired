@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 import AsyncSelect from 'react-select/async';
 
-export default function SearchBar() {
+export default function SearchBar({selectedOption , setSelectedOption}) {
 
     // https://www.cluemediator.com/react-select-async-dropdown-using-search-api
     // Refered the above to understand Async react select
 
-    const [selectedOption, setSelectedOption] = useState(null);
+    
 
     // handle selection
     const handleChange = value => {
