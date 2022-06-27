@@ -1,5 +1,5 @@
 const { MongoClient, ServerApiVersion } = require('mongodb');
-require("dotenv").config({ path: "./config.env" });
+require("dotenv").config({ path: "../config.env" });
 // const url = "mongodb+srv://root:root@cluster0.okqft.mongodb.net/OpenLibraryData?retryWrites=true&w=majority";
 const url = process.env.ATLAS_URI;
 

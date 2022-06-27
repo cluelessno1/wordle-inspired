@@ -5,7 +5,7 @@ const express = require("express");
 // The router will be added as a middleware and will take control of requests starting with path /record.
 const recordRoutes = express.Router();
 
-const queryDB = require("../queryDataFromDB.js");
+const queryDB = require("../dbQueries/queryDataFromDB.js");
 
 // This section will help you get a list of all the records.
 recordRoutes.route("/record").post(async function (req, res) {
