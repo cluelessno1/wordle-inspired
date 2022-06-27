@@ -13,8 +13,8 @@
             ],
             // "program": "${workspaceFolder}\\server\\trials\\readTrial2.js"
             // "program": "${workspaceFolder}\\server\\utilities\\mergeWorksAndAuthors5.js"
-            "program": "${workspaceFolder}\\server\\utilities\\sortAuthorsArrayAndSaveIt.js"
-            // "program": "${workspaceFolder}\\server\\server.js"
+            // "program": "${workspaceFolder}\\server\\utilities\\sortAuthorsArrayAndSaveIt.js"
+            "program": "${workspaceFolder}\\server\\server.js"
         }
     ]
 }
