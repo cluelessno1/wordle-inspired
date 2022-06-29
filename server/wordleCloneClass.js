@@ -1,14 +1,16 @@
+require("dotenv").config({ path: "./config.env" });
+
 class wordleCloneGame {
     constructor() {
-        this.totalQuestions = 1;
+        this.totalQuestions = process.env.TOTAL_QUES;
         this.currentQuesNo = 0;
-        // The below array will store the number corresponding to the number of tries to get the correct answer, if the correct answer can't be given by the player, then -1 will be stored for that question.
-        this.quesAnswers = [];
+        // The below array will store -1 by default or if skipped, 1 if the player gives the correct answer, 0 if the player gives the incorrect answer.
+        this.quesAnswers = new Array(this.totalQuestions).fill(-1);
         this.gameStatus = false;
         this.currentBookID = null;
-        this.tries = 5;
-        this.totalHintsForCurrentBookID = null;
-        this.hintsForPlayer = [];
+        // this.tries = 5;
+        this.hintForCurrentBookID = null;
+        // this.hintsForPlayer = [];
     }
 
     getTotalQuestions() {
@@ -20,20 +22,25 @@ class wordleCloneGame {
     }
 
     getQuesAnswer(quesNo) {
-        return this.quesAnswers[quesNo];
+        return this.quesAnswers[quesNo-1];
     }
 
-    setQuesAnswer(quesNo, triesTaken) {
-        this.quesAnswers[quesNo]=triesTaken;
+    setQuesAnswer(quesNo, answerFlagNo) {
+        if (answerFlagNo === 0) {
+            this.quesAnswers[quesNo-1] = 0; // incorrect answer given for ques
+        } else if (answerFlagNo === 1) {
+            this.quesAnswers[quesNo-1] = 1; // correct answer given for ques.
+        }
+        // else, ques is skipped, the value will remain -1
     }
 
-    getTries() {
-        return this.tries;
-    }
+    // getTries() {
+    //     return this.tries;
+    // }
 
-    decrementTries() {
-        this.tries--;
-    }
+    // decrementTries() {
+    //     this.tries--;
+    // }
 
     getGameStatus() {
         return this.gameStatus;
@@ -47,63 +54,64 @@ class wordleCloneGame {
         return this.currentBookID;
     }
 
-    getCurrentPlayerHints() {
-        return this.hintsForPlayer;
+    getCurrentQuesHint() {
+        return this.hintForCurrentBookID;
     }
 
     resetStartNewGame() {
-        this.totalQuestions = 1;
+        this.totalQuestions = process.env.TOTAL_QUES;
         this.currentQuesNo = 0;
-        // The below array will store the number corresponding to the number of tries to get the correct answer, if the correct answer can't be given by the player, then -1 will be stored for that question.
-        this.quesAnswers = [];
+        // The below array will store -1 by default or if skipped, 1 if the player gives the correct answer, 0 if the player gives the incorrect answer.
+        this.quesAnswers = new Array(this.totalQuestions).fill(-1);
         this.setGameStatus(false);
         this.currentBookID = null;
-        this.tries = 5;
-        this.totalHintsForCurrentBookID = null;
+        // this.tries = 5;
+        this.hintForCurrentBookID = null;
         // this.hintsForPlayer = [];
         this.newGame();
     }
 
-    newGame(currentBookID, totalHintsForCurrentBookID) {
+    newGame(currentBookID, hintForCurrentBookID) {
         this.currentQuesNo = 1;
         this.setGameStatus(true);
         this.currentBookID = currentBookID;
-        this.totalHintsForCurrentBookID = totalHintsForCurrentBookID;
-        this.hintsForPlayer.push(this.totalHintsForCurrentBookID[5-this.getTries()]);
+        this.hintForCurrentBookID = hintForCurrentBookID;
+        // this.hintsForPlayer.push(this.hintForCurrentBookID[5-this.getTries()]);
     }
 
-    nextQuestion(currentBookID, totalHintsForCurrentBookID) {
+    nextQuestion(currentBookID, hintForCurrentBookID) {
         this.currentQuesNo++;
         if (this.getCurrentQuestionNo() > this.getTotalQuestions()) {
             this.setGameStatus(false);
         } else {
-            this.tries = 5;
+            // this.tries = 5;
             this.currentBookID = currentBookID;
-            this.totalHintsForCurrentBookID = totalHintsForCurrentBookID;
-            this.hintsForPlayer = [];
-            this.hintsForPlayer.push(this.totalHintsForCurrentBookID[5-this.getTries()]);            
+            this.hintForCurrentBookID = hintForCurrentBookID;
+            // this.hintsForPlayer = [];
+            // this.hintsForPlayer.push(this.hintForCurrentBookID[5-this.getTries()]);            
         }
     }
 
     guess(guessBookID) {
-        let gameStatus;
-        if (this.getTries() > 0 && this.getGameStatus() === true) {
+        let localGameStatus;
+        if (this.getGameStatus() === true) {
             if (this.getCurrentBookID() === guessBookID) {
-                gameStatus = true;
-                this.setQuesAnswer(this.getCurrentQuestionNo(),this.getTries());
+                localGameStatus = true;
+                this.setQuesAnswer(this.getCurrentQuestionNo(),1);
             } else {
-                gameStatus = false;
+                localGameStatus = false;
+                this.setQuesAnswer(this.getCurrentQuestionNo(),0);
             }
-            this.decrementTries();
-            if (this.getTries > 0) {
-                this.hintsForPlayer.push(this.totalHintsForCurrentBookID[5-this.getTries]);
-            }
+            // this.decrementTries();
+            // if (this.getTries > 0) {
+            //     this.hintsForPlayer.push(this.hintForCurrentBookID[5-this.getTries]);
+            // }
         } else {
             // this.setGameStatus(false);
-            gameStatus = false;
-            this.setQuesAnswer(this.getCurrentQuestionNo(),-1);
+            localGameStatus = false;
+            // this.setQuesAnswer(this.getCurrentQuestionNo(),-1);
         }
-        return gameStatus;
+        return localGameStatus;
     }
 
 }
